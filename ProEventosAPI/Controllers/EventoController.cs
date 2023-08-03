@@ -1,10 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
+using ProEventosAPI.Data;
 using ProEventosAPI.Models;
 
 namespace ProEventosAPI.Controllers {
     [ApiController]
     [Route("api/[controller]")]
     public class EventoController : ControllerBase {
+
+        private readonly DataContext _dataContext;
+
+        public EventoController(DataContext dataContext) {
+            _dataContext = dataContext;
+        }
 
         public IEnumerable<Evento> _evento = new Evento[] {
             new Evento() {
@@ -27,27 +34,17 @@ namespace ProEventosAPI.Controllers {
                 }
         };
 
-
-        private static readonly string[] Summaries = new[]
-        {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
-
-        public EventoController() {
-
-        }
-
         [HttpGet]
         public IEnumerable<Evento> Get() {
 
-            return _evento;
+            return _dataContext.Eventos;
 
         }
 
         [HttpGet("{id}")]
         public IEnumerable<Evento> GetById(int id) { 
         
-            return _evento.Where(evento => evento.EventoId == id);
+            return _dataContext.Eventos.Where(evento => evento.EventoId == id);
         
         }
 
